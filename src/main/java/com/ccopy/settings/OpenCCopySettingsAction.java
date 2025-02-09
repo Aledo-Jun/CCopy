@@ -11,7 +11,7 @@ public class OpenCCopySettingsAction extends AnAction {
 
     // 생성자에서 액션의 이름과 설명(툴팁)을 설정할 수 있습니다.
     public OpenCCopySettingsAction() {
-        super("CCopy Settings", "Open the CCopy plugin settings", null);
+        super("C++ Includes Expander", "Open the CCopy plugin settings", null);
     }
 
     @Override
