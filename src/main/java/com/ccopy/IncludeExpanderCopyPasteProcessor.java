@@ -1,5 +1,6 @@
 package com.ccopy;
 
+import com.ccopy.settings.CCopySettings;
 import com.intellij.codeInsight.editorActions.CopyPastePreProcessor;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.RawText;
@@ -23,6 +24,8 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
      */
     @Override
     public @Nullable String preprocessOnCopy(PsiFile file, int[] startOffsets, int[] endOffsets, String text) {
+        if (!CCopySettings.getInstance().getState().enabled) return text;
+
         if (text == null) return null;
 
         if (!isCppFile(file)) {
@@ -33,7 +36,8 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         processedFiles.clear();
 
         // main process
-        return expandIncludes(text, file);
+        String startingAnnouncement = "// ** The #include statements were replaced by [ CCopy ] **\n";
+        return startingAnnouncement + expandIncludes(text, file);
     }
 
     /**
@@ -51,15 +55,25 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
 
     private String expandIncludes(String text, PsiFile currentFile) {
         StringBuilder result = new StringBuilder();
+
         String[] lines = text.split("\n");
         for (String line : lines) {
             if (line.trim().startsWith("#include")) {
                 String headerName = extractFilePath(line);
-                if (headerName == null || StandardHeaders.is_std_header(headerName))
+                if (headerName == null)
                     result.append(line).append("\n");
+                else if (StandardHeaders.is_std_header(headerName)) {
+                    if (!processedFiles.contains(headerName)) {
+                        processedFiles.add(headerName);
+                        result.append(line).append("\n");
+                    }
+                }
                 else {
-                    String fileContent = readAndProcessFile(headerName, currentFile);
-                    result.append(fileContent).append("\n");
+                    if (!processedFiles.contains(headerName)) {
+                        processedFiles.add(headerName);
+                        String fileContent = readAndProcessFile(headerName, currentFile);
+                        result.append(fileContent).append("\n");
+                    }
                 }
             } else {
                 result.append(line).append("\n");
@@ -84,25 +98,20 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
     }
 
     private String readAndProcessFile(String relativePath, PsiFile currentFile) {
-        if (processedFiles.contains(relativePath)) {
-            return "";
-        }
-        processedFiles.add(relativePath);
-
         VirtualFile currentVF = currentFile.getVirtualFile();
         if (currentVF == null) {
-            return "Current file not accessible";
+            return "// [ " + currentFile.getName() + " ] Current file not accessible";
         }
         VirtualFile includeVF = currentVF.getParent().findFileByRelativePath(relativePath);
-        if (includeVF == null) { // assume to be built-in header such as iostream
-            return "";
+        if (includeVF == null) { // if StandardHeaders are well constructed, it'll not happen
+            return "// [ " + relativePath + " ] Cannot find the file";
         }
 
         String fileText;
         try {
             fileText = new String(includeVF.contentsToByteArray(), includeVF.getCharset());
         } catch (IOException e) {
-            return "// [ " + relativePath + " Cannot read the file ]";
+            return "// [ " + relativePath + " ] Cannot read the file";
         }
 
         // include guard removing
@@ -110,6 +119,8 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
 
         // remove starting comments
         fileText = removeStartingComments(fileText);
+
+        fileText = "// [ #include \"" + relativePath + "\" ]\n" + fileText + "\n// end of [ " + relativePath + " ]";
 
         // recursion
         return expandIncludes(fileText, currentFile);
