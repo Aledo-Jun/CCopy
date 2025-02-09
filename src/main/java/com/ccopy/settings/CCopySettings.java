@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 public class CCopySettings implements PersistentStateComponent<CCopySettings.State> {
     public static class State {
         public boolean enabled = true;          // ON if true
-        public String copyShortcut = "ctrl C";  // default = ctrl C
     }
 
     private State myState = new State();
