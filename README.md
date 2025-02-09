@@ -29,9 +29,6 @@ and be sure that all necessary code is included—without the clutter of redunda
 - **Selective Processing**  
   Leaves system headers (e.g., `<iostream>`, `<algorithm>`) untouched, processing only user-defined or non-standard includes.
 
-- **Customizable Behavior**  
-  Toggle the expansion feature on or off and configure a custom shortcut for the copy command directly from the plugin settings.
-
 - **Ideal for Competitive Programming**  
   Create self-contained, submission-ready code with minimal effort.
 
@@ -71,7 +68,7 @@ and be sure that all necessary code is included—without the clutter of redunda
 ## Configuration
 
 - **Toggle Feature On/Off**  
-  Navigate to `Settings > Tools > C++ Includes Expander` to enable or disable the automatic include expansion.
+  Navigate to `Settings > Tools > C++ Includes Expander` or `Toolbar > Tools > C++ Includes Expander` to enable or disable the automatic include expansion.
 
 ---
 
