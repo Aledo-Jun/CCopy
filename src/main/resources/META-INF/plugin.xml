@@ -14,7 +14,17 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    C++ includes expander for competitive programming on online-judges
+    C++ Includes Expander is a CLion plugin designed to streamline competitive programming on online judges. When you copy C++ code that contains local include directives, the plugin automatically replaces those includes with the actual code from the referenced files. This makes your copied code fully self-contained and ready to compile, eliminating the hassle of managing multiple source files.
+
+    Key features include:
+    • **Automatic Include Expansion:** Recursively processes local include statements to inline their contents, ensuring that your code can be compiled as a standalone unit.
+    • **Dependency Management:** Constructs an include tree to prevent duplicate inclusions and maintain the correct order, while intelligently stripping out redundant include guards.
+    • **Selective Processing:** System headers (e.g., &lt;iostream&gt;, &lt;algorithm&gt;) are left untouched, while known local headers are handled appropriately.
+    • **Customizable Behavior:** Easily toggle the functionality on/off and configure a custom shortcut for the copy command through the plugin settings.
+
+    This tool is ideal for competitive programmers who need to quickly generate single-file submissions for online judges.
+
+    For more information, visit: https://github.com/ccopy
   ]]></description>
 
 
@@ -26,5 +36,9 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <copyPastePreProcessor implementation="com.ccopy.IncludeExpanderCopyPasteProcessor"/>
+        <projectConfigurable
+                instance="com.ccopy.settings.CCopyConfigurable"
+                id="com.ccopy.settings.CCopyConfigurable"
+                displayName="CCopy Settings"/>
     </extensions>
 </idea-plugin>
