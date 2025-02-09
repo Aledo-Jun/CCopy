@@ -14,7 +14,6 @@ import java.awt.*;
 public class CCopyConfigurable implements SearchableConfigurable {
     private JPanel mainPanel;
     private JCheckBox enableCheckBox;
-    private JTextField shortcutField;
 
     // UI 초기화
     @Nullable
@@ -32,49 +31,31 @@ public class CCopyConfigurable implements SearchableConfigurable {
         gbc.gridwidth = 2;
         mainPanel.add(enableCheckBox, gbc);
 
-        // 단축키 라벨
-        JLabel shortcutLabel = new JLabel("Copy Command Shortcut:");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.gridwidth = 1;
-        mainPanel.add(shortcutLabel, gbc);
-
-        // 단축키 입력란
-        shortcutField = new JTextField(20);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        mainPanel.add(shortcutField, gbc);
-
         return mainPanel;
     }
 
     @Override
     public boolean isModified() {
         CCopySettings.State state = CCopySettings.getInstance().getState();
-        boolean modified = (enableCheckBox.isSelected() != state.enabled);
-        modified |= (!shortcutField.getText().equals(state.copyShortcut));
-        return modified;
+        return enableCheckBox.isSelected() != state.enabled;
     }
 
     @Override
     public void apply() throws ConfigurationException {
         CCopySettings.State state = CCopySettings.getInstance().getState();
         state.enabled = enableCheckBox.isSelected();
-        state.copyShortcut = shortcutField.getText();
     }
 
     @Override
     public void reset() {
         CCopySettings.State state = CCopySettings.getInstance().getState();
         enableCheckBox.setSelected(state.enabled);
-        shortcutField.setText(state.copyShortcut);
     }
 
     @Override
     public void disposeUIResources() {
         mainPanel = null;
         enableCheckBox = null;
-        shortcutField = null;
     }
 
     @NotNull
