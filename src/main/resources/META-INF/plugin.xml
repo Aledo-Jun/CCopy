@@ -35,10 +35,25 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
+
         <copyPastePreProcessor implementation="com.ccopy.IncludeExpanderCopyPasteProcessor"/>
+
         <projectConfigurable
                 instance="com.ccopy.settings.CCopyConfigurable"
                 id="com.ccopy.settings.CCopyConfigurable"
                 displayName="CCopy Settings"/>
+
+        <applicationService serviceImplementation="com.ccopy.settings.CCopySettings"/>
+
     </extensions>
+
+    <actions>
+        <!-- action for opening the settings UI -->
+        <action id="com.ccopy.settings.OpenCCopySettingsAction"
+                class="com.ccopy.settings.OpenCCopySettingsAction"
+                text="CCopy Settings"
+                description="Open the CCopy settings">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
 </idea-plugin>
