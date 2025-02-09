@@ -14,19 +14,27 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    C++ Includes Expander is a CLion plugin designed to streamline competitive programming on online judges. When you copy C++ code that contains local include directives, the plugin automatically replaces those includes with the actual code from the referenced files. This makes your copied code fully self-contained and ready to compile, eliminating the hassle of managing multiple source files.
-
-    Key features include:
-    • **Automatic Include Expansion:** Recursively processes local include statements to inline their contents, ensuring that your code can be compiled as a standalone unit.
-    • **Dependency Management:** Constructs an include tree to prevent duplicate inclusions and maintain the correct order, while intelligently stripping out redundant include guards.
-    • **Selective Processing:** System headers (e.g., &lt;iostream&gt;, &lt;algorithm&gt;) are left untouched, while known local headers are handled appropriately.
-    • **Customizable Behavior:** Easily toggle the functionality on/off and configure a custom shortcut for the copy command through the plugin settings.
-
+  <h2>CCopy: C++ Includes Expander</h2>
+  <p>
+    <strong>CCopy</strong> is a powerful CLion plugin designed to streamline competitive programming on online judges. When you copy C++ code containing local include directives, the plugin automatically replaces them with the actual code from the referenced files.
+  </p>
+  <p>
+    This makes your copied code fully self-contained and ready to compile, eliminating the hassle of managing multiple source files.
+  </p>
+  <h3>Key Features</h3>
+  <ul>
+    <li><strong>Automatic Include Expansion:</strong> Recursively processes local include statements to inline their contents, ensuring that your code compiles as a standalone unit.</li>
+    <li><strong>Dependency Management:</strong> Constructs an include tree to prevent duplicate inclusions and maintain the correct order, while intelligently stripping out redundant include guards.</li>
+    <li><strong>Selective Processing:</strong> System headers (e.g., <code>&lt;iostream&gt;</code>, <code>&lt;algorithm&gt;</code>) are left untouched, while known local headers are handled appropriately.</li>
+    <li><strong>Customizable Behavior:</strong> Easily toggle the functionality on/off and configure a custom shortcut for the copy command through the plugin settings.</li>
+  </ul>
+  <p>
     This tool is ideal for competitive programmers who need to quickly generate single-file submissions for online judges.
-
-    For more information, visit: https://github.com/ccopy
-  ]]></description>
-
+  </p>
+  <p>
+    For more information, visit: <a href="https://github.com/ccopy" target="_blank">https://github.com/Aledo-Jun/CCopy</a>
+  </p>
+]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -35,20 +43,20 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
         <copyPastePreProcessor implementation="com.ccopy.IncludeExpanderCopyPasteProcessor"/>
 
         <projectConfigurable
+                parentId="tools"
                 instance="com.ccopy.settings.CCopyConfigurable"
                 id="com.ccopy.settings.CCopyConfigurable"
-                displayName="CCopy Settings"/>
+                displayName="C++ Includes Expander"/>
 
         <applicationService serviceImplementation="com.ccopy.settings.CCopySettings"/>
 
     </extensions>
 
     <actions>
-        <!-- action for opening the settings UI -->
+        <!-- open the settings UI -->
         <action id="com.ccopy.settings.OpenCCopySettingsAction"
                 class="com.ccopy.settings.OpenCCopySettingsAction"
                 text="CCopy Settings"
