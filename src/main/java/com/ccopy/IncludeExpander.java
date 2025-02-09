@@ -1,29 +1,23 @@
 package com.ccopy;
 
 import com.ccopy.settings.CCopySettings;
-import com.intellij.codeInsight.editorActions.CopyPastePreProcessor;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.RawText;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor {
+public class IncludeExpander {
 
     // To prevent multiple includes
-    private final Set<String> processedFiles = new HashSet<>();
+    private static final Set<String> processedFiles = new HashSet<>();
 
     /**
      * If not-null value is returned by this method, it will replace copied text. No other preprocessor will be invoked at copy time after this.
      */
-    @Override
-    public @Nullable String preprocessOnCopy(PsiFile file, int[] startOffsets, int[] endOffsets, String text) {
+    public static @Nullable String expand(PsiFile file, String text) {
         if (!CCopySettings.getInstance().getState().enabled) return text;
 
         if (text == null) return null;
@@ -36,24 +30,16 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         processedFiles.clear();
 
         // main process
-        String startingAnnouncement = "// ** The #include statements were replaced by [ CCopy ] **\n";
+        String startingAnnouncement = "//\n// ** The #include statements were replaced by [ CCopy ] **\n//\n";
         return startingAnnouncement + expandIncludes(text, file);
     }
 
-    /**
-     * Replaces pasted text. {@code text} value should be returned if no processing is required.
-     */
-    @Override
-    public @NotNull String preprocessOnPaste(Project project, PsiFile file, Editor editor, String text, RawText rawText) {
-        return text;
-    }
-
-    private boolean isCppFile(PsiFile file) {
+    private static boolean isCppFile(PsiFile file) {
         String langId = file.getLanguage().getID();
         return "C/C++".equals(langId) || "ObjectiveC++".equals(langId) || "ObjectiveC".equals(langId);
     }
 
-    private String expandIncludes(String text, PsiFile currentFile) {
+    private static String expandIncludes(String text, PsiFile currentFile) {
         StringBuilder result = new StringBuilder();
 
         String[] lines = text.split("\n");
@@ -82,7 +68,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         return result.toString();
     }
 
-    private String extractFilePath(String includeLine) {
+    private static String extractFilePath(String includeLine) {
         // Ex) "#include "MyHeader.h" -> "MyHeader.h"
         int start = includeLine.indexOf("\"");
         int end = includeLine.lastIndexOf("\"");
@@ -97,7 +83,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         return null;
     }
 
-    private String readAndProcessFile(String relativePath, PsiFile currentFile) {
+    private static String readAndProcessFile(String relativePath, PsiFile currentFile) {
         VirtualFile currentVF = currentFile.getVirtualFile();
         if (currentVF == null) {
             return "// [ " + currentFile.getName() + " ] Current file not accessible";
@@ -126,7 +112,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         return expandIncludes(fileText, currentFile);
     }
 
-    private String removeStartingComments(String fileText) {
+    private static String removeStartingComments(String fileText) {
         StringBuilder result = new StringBuilder();
         String[] lines = fileText.split("\n");
         boolean firstComment = true;

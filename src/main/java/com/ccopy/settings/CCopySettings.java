@@ -7,7 +7,7 @@ import com.intellij.openapi.components.Storage;
 import org.jetbrains.annotations.NotNull;
 
 
-@State(name = "CCopySettings", storages = @Storage("ccopy.xml"))
+@State(name = "CCopySettings", storages = @Storage("CCopySettings.xml"))
 public class CCopySettings implements PersistentStateComponent<CCopySettings.State> {
     public static class State {
         public boolean enabled = true;          // ON if true

@@ -26,7 +26,7 @@ public class CCopyConfigurable implements SearchableConfigurable {
         gbc.anchor = GridBagConstraints.WEST;
 
         // 기능 활성화 체크박스
-        enableCheckBox = new JCheckBox("Enable Copy Expansion");
+        enableCheckBox = new JCheckBox("Enable Copy Include Expansion");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
