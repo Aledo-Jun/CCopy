@@ -38,7 +38,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         isModified = false;
 
         // main process
-        String startingAnnouncement = "// ** The #include statements were replaced by [ CCopy ] **\n";
+        String startingAnnouncement = "//\n// ** The #include statements were replaced by [ CCopy ] **\n// @See http://github.com/Aledo-Jun/CCopy\n//\n";
         String expanded = expandIncludes(text, file);
         return (isModified ? startingAnnouncement : "") + expanded;
     }
