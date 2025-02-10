@@ -73,7 +73,6 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
                 }
                 else {
                     if (!processedFiles.contains(headerName)) {
-                        isModified = true;
                         processedFiles.add(headerName);
                         String fileContent = readAndProcessFile(headerName, currentFile);
                         result.append(fileContent).append("\n");
@@ -117,6 +116,8 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         } catch (IOException e) {
             return "// [ " + relativePath + " ] Cannot read the file";
         }
+
+        isModified = true;
 
         // include guard removing
         fileText = IncludeGuardRemover.removeIncludeGuards(fileText);
