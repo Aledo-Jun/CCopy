@@ -18,6 +18,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
 
     // To prevent multiple includes
     private final Set<String> processedFiles = new HashSet<>();
+    private boolean isModified = false;
 
     /**
      * If not-null value is returned by this method, it will replace copied text. No other preprocessor will be invoked at copy time after this.
@@ -34,10 +35,12 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
 
         // processedFiles initialize
         processedFiles.clear();
+        isModified = false;
 
         // main process
         String startingAnnouncement = "// ** The #include statements were replaced by [ CCopy ] **\n";
-        return startingAnnouncement + expandIncludes(text, file);
+        String expanded = expandIncludes(text, file);
+        return (isModified ? startingAnnouncement : "") + expanded;
     }
 
     /**
@@ -70,6 +73,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
                 }
                 else {
                     if (!processedFiles.contains(headerName)) {
+                        isModified = true;
                         processedFiles.add(headerName);
                         String fileContent = readAndProcessFile(headerName, currentFile);
                         result.append(fileContent).append("\n");
@@ -83,7 +87,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
     }
 
     private String extractFilePath(String includeLine) {
-        // Ex) "#include "MyHeader.h" -> "MyHeader.h"
+        // Ex. #include "MyHeader.h" -> MyHeader.h
         int start = includeLine.indexOf("\"");
         int end = includeLine.lastIndexOf("\"");
         if (start != -1 && end != -1 && start < end) {
@@ -104,7 +108,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         }
         VirtualFile includeVF = currentVF.getParent().findFileByRelativePath(relativePath);
         if (includeVF == null) { // if StandardHeaders are well constructed, it'll not happen
-            return "// [ " + relativePath + " ] Cannot find the file";
+            return "#include <" + relativePath + ">"; // But if happens, just return back the original line
         }
 
         String fileText;
