@@ -38,7 +38,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         isModified = false;
 
         // main process
-        String startingAnnouncement = "//\n// ** The #include statements were replaced by [ CCopy ] **\n// @See http://github.com/Aledo-Jun/CCopy\n//\n";
+        String startingAnnouncement = "//\n// ** The #include statements were replaced by [ CCopy ] **\n// @See http://github.com/Aledo-Jun/CCopy\n//\n\n";
         String expanded = expandIncludes(text, file);
         return (isModified ? startingAnnouncement : "") + expanded;
     }
@@ -82,6 +82,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
                 result.append(line).append("\n");
             }
         }
+        result.deleteCharAt(result.length() - 1); // delete the last appended newline character
         return result.toString();
     }
 
