@@ -26,13 +26,16 @@
     <li><strong>Automatic Include Expansion:</strong> Recursively processes local include statements to inline their contents, ensuring that your code compiles as a standalone unit.</li>
     <li><strong>Dependency Management:</strong> Constructs an include tree to prevent duplicate inclusions and maintain the correct order, while intelligently stripping out redundant include guards.</li>
     <li><strong>Selective Processing:</strong> System headers (e.g., <code>&lt;iostream&gt;</code>, <code>&lt;algorithm&gt;</code>) are left untouched, while known local headers are handled appropriately.</li>
-    <li><strong>Customizable Behavior:</strong> Easily toggle the functionality on/off and configure a custom shortcut for the copy command through the plugin settings.</li>
+    <li><strong>Customizable Behavior:</strong> Easily toggle the functionality on/off through the plugin settings.</li>
   </ul>
   <p>
     This tool is ideal for competitive programmers who need to quickly generate single-file submissions for online judges.
   </p>
   <p>
     For more information, visit: <a href="https://github.com/ccopy" target="_blank">https://github.com/Aledo-Jun/CCopy</a>
+  </p>
+  <p>
+    <a href="https://www.buymeacoffee.com/june0501"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=june0501&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
   </p>
 ]]></description>
 
