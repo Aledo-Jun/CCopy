@@ -7,11 +7,13 @@ import com.intellij.openapi.editor.RawText;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor {
@@ -129,7 +131,8 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
         fileText = "// [ #include \"" + relativePath + "\" ]\n" + fileText + "\n// end of [ " + relativePath + " ]";
 
         // recursion
-        return expandIncludes(fileText, currentFile);
+        return expandIncludes(fileText,
+                PsiManager.getInstance(currentFile.getProject()).findFile(includeVF));
     }
 
     private String removeStartingComments(String fileText) {
