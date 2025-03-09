@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor {
@@ -54,7 +53,7 @@ public class IncludeExpanderCopyPasteProcessor implements CopyPastePreProcessor 
     }
 
     private boolean isCppFile(PsiFile file) {
-        String langId = file.getLanguage().getID();
+        String langId = file.getLanguage().getDisplayName();
         return "C/C++".equals(langId) || "ObjectiveC++".equals(langId) || "ObjectiveC".equals(langId);
     }
 
